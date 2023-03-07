@@ -7,6 +7,8 @@ import json
 from pynput import keyboard
 import threading
 
+meta_data_karting = "1;100;100;ivanov;20 km/h\\1;300;100;ivanov;20 km/h\\1;500;100;ivanov;20 km/h\\1;700;100;ivanov;20 km/h\\1;100;200;ivanov;20 km/h\\1;300;200;ivanov;20 km/h\\1;500;200;ivanov;20 km/h\\1;700;200;ivanov;20 km/h"
+
 class vector:
     def __init__(self, x=0, y=0, z=0):
         self.x = x 
@@ -133,7 +135,8 @@ def main():
                 # if count % 30 == 0:
                 #     telemetry["Data"] += "0"*(2**16)
                 telemetry["Length"] = len(json.dumps(telemetry))
-                video_frame.metadata = f'<json>{json.dumps(telemetry)}</json>'#json.dumps(telemetry[count])
+                # video_frame.metadata = f'<json>{json.dumps(telemetry)}</json>'#json.dumps(telemetry[count])
+                video_frame.metadata = f'<json>{meta_data_karting}</json>'#json.dumps(telemetry[count])
 
                 ndi.send_send_video_v2(ndi_send, video_frame)
 
