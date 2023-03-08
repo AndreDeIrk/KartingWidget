@@ -7,7 +7,7 @@ import json
 from pynput import keyboard
 import threading
 
-meta_data_karting = "1;250;450;ivanov;20 km/h;1;10\\1;350;450;ivanov;20 km/h;3;10\\1;150;450;ivanov;20 km/h;5;10\\1;250;350;ivanov;20 km/h;6;10\\1;100;200;ivanov;20 km/h;7;10\\1;300;200;ivanov;20 km/h;10;10\\1;500;200;ivanov;20 km/h;11;10\\1;700;200;ivanov;20 km/h;9;10"
+meta_data_karting = "1;250;450;ivanov;20 km/h;1;10\\1;350;450;ivanov;20 km/h;3;10\\1;150;450;ivanov;20 km/h;5;10\\1;250;350;ivanov;20 km/h;6;10\\0;100;200;ivanov;20 km/h;7;10\\0;300;200;ivanov;20 km/h;10;10\\0;500;200;ivanov;20 km/h;11;10\\0;700;200;ivanov;20 km/h;9;10"
 
 class vector:
     def __init__(self, x=0, y=0, z=0):
