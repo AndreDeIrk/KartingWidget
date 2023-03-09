@@ -6,8 +6,12 @@ import cv2
 import json
 from pynput import keyboard
 import threading
+import oval as o
 
-meta_data_karting = "1;250;450;ivanov;20 km/h;1;10\\1;350;450;ivanov;20 km/h;3;10\\1;150;450;ivanov;20 km/h;5;10\\1;250;350;ivanov;20 km/h;6;10\\0;100;200;ivanov;20 km/h;7;10\\0;300;200;ivanov;20 km/h;10;10\\0;500;200;ivanov;20 km/h;11;10\\0;700;200;ivanov;20 km/h;9;10"
+
+angle = 0
+dx, dy = o.track_fun(angle)
+meta_data_karting = f"1;250;450;ivanov;20 km/h;1;10;{angle};{dx};{dy}\\0;350;450;ivanov;20 km/h;3;10;{angle};{dx};{dy}\\0;150;450;ivanov;20 km/h;5;10;{angle};{dx};{dy}\\0;250;350;ivanov;20 km/h;6;10;{angle};{dx};{dy}\\0;100;200;ivanov;20 km/h;7;10;{angle};{dx};{dy}\\0;300;200;ivanov;20 km/h;10;10;{angle};{dx};{dy}\\0;500;200;ivanov;20 km/h;11;10;{angle};{dx};{dy}\\0;700;200;ivanov;20 km/h;9;10;{angle};{dx};{dy}"
 
 class vector:
     def __init__(self, x=0, y=0, z=0):
@@ -96,6 +100,11 @@ listener = threading.Thread(target=kb_catch)
 
 def main():
 
+    angle = 0
+    dx, dy = o.track_fun(angle)
+    meta_data_karting = f"1;250;450;ivanov;20 km/h;1;10;{angle};{dx};{dy}\\0;350;450;ivanov;20 km/h;3;10;{angle};{dx};{dy}\\0;150;450;ivanov;20 km/h;5;10;{angle};{dx};{dy}\\0;250;350;ivanov;20 km/h;6;10;{angle};{dx};{dy}\\0;100;200;ivanov;20 km/h;7;10;{angle};{dx};{dy}\\0;300;200;ivanov;20 km/h;10;10;{angle};{dx};{dy}\\0;500;200;ivanov;20 km/h;11;10;{angle};{dx};{dy}\\0;700;200;ivanov;20 km/h;9;10;{angle};{dx};{dy}"
+
+
     if not ndi.initialize():
         return 0
 
@@ -132,6 +141,14 @@ def main():
                                                                                                      y=telemetry["Widget"]["Map"]["Y"],
                                                                                                      dx=MAP_SPEED.x,
                                                                                                      dy=MAP_SPEED.y)
+
+                angle = (angle+1) % 360
+                dx, dy = o.track_fun(angle)
+                dx1, dy1 = o.track_fun((angle+120) % 360)
+                dx2, dy2 = o.track_fun((angle+240) % 360)
+                meta_data_karting = f"1;250;450;ivanov;20 km/h;1;10;{angle};{dx};{dy}\\1;350;450;ivanov;20 km/h;3;10;{angle};{dx1};{dy1}\\1;150;450;ivanov;20 km/h;5;10;{angle};{dx2};{dy2}\\0;250;350;ivanov;20 km/h;6;10;{angle};{dx};{dy}\\0;100;200;ivanov;20 km/h;7;10;{angle};{dx};{dy}\\0;300;200;ivanov;20 km/h;10;10;{angle};{dx};{dy}\\0;500;200;ivanov;20 km/h;11;10;{angle};{dx};{dy}\\0;700;200;ivanov;20 km/h;9;10;{angle};{dx};{dy}"
+
+
                 # if count % 30 == 0:
                 #     telemetry["Data"] += "0"*(2**16)
                 telemetry["Length"] = len(json.dumps(telemetry))
