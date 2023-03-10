@@ -1,5 +1,6 @@
 import sys
 import time
+import datetime
 import numpy as np
 import NDIlib as ndi
 import cv2
@@ -120,6 +121,10 @@ def main():
     # img = np.zeros((1080, 1920, 4), dtype=np.uint8)
 
     video_frame = ndi.VideoFrameV2()
+
+    video_frame.frame_rate_N = 50
+    video_frame.frame_rate_D = 1
+
     video_frame.FourCC = ndi.FOURCC_VIDEO_TYPE_BGRX
 
     # print(f'Frame format: {video_frame.data.shape}')
@@ -149,10 +154,10 @@ def main():
                 angle = (angle+1) % 360
                 plate_x = (plate_x + 1) % 1920
                 plate_y = 450 + 100 * np.cos(plate_x / 10)
-                dx, dy = o.track_fun(angle)
-                dx1, dy1 = o.track_fun((angle+120) % 360)
-                dx2, dy2 = o.track_fun((angle+240) % 360)
-                meta_data_karting = f"1;{plate_x};{plate_y};ivanov;20 km/h;1;10;{angle};{dx};{dy}\\0;350;450;ivanov;20 km/h;3;10;{angle};{dx1};{dy1}\\0;150;450;ivanov;20 km/h;5;10;{angle};{dx2};{dy2}\\0;250;350;ivanov;20 km/h;6;10;{angle};{dx};{dy}\\0;100;200;ivanov;20 km/h;7;10;{angle};{dx};{dy}\\0;300;200;ivanov;20 km/h;10;10;{angle};{dx};{dy}\\0;500;200;ivanov;20 km/h;11;10;{angle};{dx};{dy}\\0;700;200;ivanov;20 km/h;9;10;{angle};{dx};{dy}"
+                dx, dy = fa.from_angle(angle)
+                dx1, dy1 = fa.from_angle((angle+120) % 360)
+                dx2, dy2 = fa.from_angle((angle+240) % 360)
+                meta_data_karting = f"1;{plate_x};{plate_y};ivanov;20 km/h;1;10;{angle};{dx};{-dy}\\1;350;450;ivanov;20 km/h;3;10;{angle};{dx1};{-dy1}\\1;150;450;ivanov;20 km/h;5;10;{angle};{dx2};{-dy2}\\0;250;350;ivanov;20 km/h;6;10;{angle};{dx};{dy}\\0;100;200;ivanov;20 km/h;7;10;{angle};{dx};{dy}\\0;300;200;ivanov;20 km/h;10;10;{angle};{dx};{dy}\\0;500;200;ivanov;20 km/h;11;10;{angle};{dx};{dy}\\0;700;200;ivanov;20 km/h;9;10;{angle};{dx};{dy}"
 
 
                 # if count % 30 == 0:
@@ -162,6 +167,7 @@ def main():
                 video_frame.metadata = f'<json>{meta_data_karting}</json>'#json.dumps(telemetry[count])
 
                 ndi.send_send_video_v2(ndi_send, video_frame)
+                print(datetime.datetime.now())
 
                 success, image = vidcap.read()
                 count += 1
